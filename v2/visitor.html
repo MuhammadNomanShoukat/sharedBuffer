@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO chat</title>
+  <style>
+    ul { list-style-type: none; margin: 0; padding: 0; }
+    li { padding: 8px; margin-bottom: 10px; background: #f3f3f3; }
+    input { padding: 10px; width: 80%; margin-right: .5%; }
+    button { width: 19%; padding: 10px; }
+
+    .main-wrapper{
+        width: 30%;
+        margin: 0 auto;
+        border: 1px solid #000;
+        position: relative;
+
+    }
+
+    #messages{
+        min-height: 500px;
+        max-height: 500px;
+        overflow-y:scroll;
+    }
+
+    .main-wrapper form{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+    }
+
+    #visitor_info{
+        background-color: blue;
+        color:white;
+        padding:20px;
+    }
+
+    .header{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .header i {
+        padding: 20px;
+        background: #1fbf27;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+    main{
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .d-n{
+      display: none !important;
+    }
+
+    .d-b{
+      display: flex !important;
+    }
+    .chat{
+      display: flex;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="@zoom/videosdk-ui-toolkit/dist/videosdk-ui-toolkit.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./custom.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <main>
+    <div class="main-wrapper">
+        <div class="header">
+            <h4 id="visitor_info"></h4>
+            <i class="fa-solid fa-phone" onclick="makeACall()"></i>
+        </div>
+        
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+    </div>
+
+    <div class="main-wrapper chat">
+      <div class="call-box d-n" id="chat_box">
+        <div class="heading">
+          <p><i class="fa-solid fa-phone"></i></p>
+          <h5>Incomming call ...</h5>
+          <div class="call-btns">
+            <button class="accept" onclick="onAcceptCallHandler()">Accept</button>
+            <button class="decline" onclick="onDeclineCallHandler()">Decline</button>
+          </div>
+        </div>
+      </div>
+      <div id="call-status"></div>
+      <div id="join-flow"></div>
+      <div id='sessionContainer'></div>
+    </div>
+  </main>
+    
+   
+  <script src="https://node-server-kohl.vercel.app/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io('https://node-server-kohl.vercel.app/'); // Ensure this matches the server address and port
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    socket.on('corejs-client', function(msg) {
+      console.log('Message received from server: ' + msg);
+      var item = document.createElement('li');
+      item.textContent = msg;
+      document.getElementById('messages').appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('visitor-info', function(msg) {
+      console.log('Visitor info: ' + msg);
+      const selector = document.getElementById("visitor_info")
+      selector.innerText = "Visitor_"+msg
+    });
+
+    socket.on('operator-call-status', function(msg) {
+      console.log('Visitor info: ' + msg);
+      const selector = document.getElementById("call-status")
+      selector.innerText = !msg ? "Operator Decline call" : ""
+    });
+
+    socket.on("operator-start-call", (data) => {
+      document.getElementById("call-status").innerText = ""
+      const selector = document.getElementById("chat_box")
+      if(data){
+        selector.classList.add("d-b");
+        selector.classList.remove("d-n");
+
+      }else{
+        selector.classList.remove("d-b");
+      }
+    });
+
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {
+        console.log('Sending message: ' + input.value);
+        socket.emit('corejs-client', input.value);
+        input.value = '';
+      }
+    });
+
+    function makeACall(){
+      console.log("helo")
+      socket.emit('visitor-call', "start-call");
+      getVideoSDKJWT()
+    }
+
+    function onDeclineCallHandler(){
+      const selector = document.getElementById("chat_box")
+      selector.classList.remove("d-b");
+      socket.emit("visitor-decline-call", true)
+    }
+
+    function onAcceptCallHandler(){
+      const selector = document.getElementById("chat_box")
+      selector.classList.add("d-n");
+      selector.classList.remove("d-b");
+      getVideoSDKJWT()
+    }
+  </script>
+  <script src="@zoom/videosdk-ui-toolkit/index.js" type="module"></script>
+  <script src="scripts.js" type="module"></script>
+</body>
+</html>
