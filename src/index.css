@@ -10,3 +10,17 @@ body {
 html, body {
     min-width: 0 !important;
 }
+
+.call-view{
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    /* border: 1px solid #ddd; */
+}
+
+.call-view #sessionContainer1{
+    border: 1px solid #ddd;
+}
+.call-view #sessionContainer2{
+    border: 1px solid #ddd;
+}

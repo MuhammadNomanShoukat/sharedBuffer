@@ -23,3 +23,22 @@ main #join-flow button {
 main #join-flow button:hover {
     background-color: #2681F2;
 }
+
+.App{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.App main{
+    border: 1px solid #ddd;
+    min-height: 300px;
+    max-width: 49%;
+    
+}
+
+.heading{
+    text-align: center;
+}
