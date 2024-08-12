@@ -17,7 +17,7 @@ function getVideoSDKJWT(operator) {
     var config = {
         videoSDKJWT: '',
         sessionName: operator == 1 ? "Room1" : "Room2",
-        userName: visito_id,
+        userName: "Visitor_" + String(visito_id),
         sessionPasscode: '123',
         features: ['video', 'audio', 'settings', 'users', 'chat', 'share']
     };
