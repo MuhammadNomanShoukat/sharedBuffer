@@ -10,6 +10,7 @@ function App() {
   var authEndpoint = 'https://zoom-video-sdk-f4fj.vercel.app/'
 
   function getVideoSDKJWT(operator) {
+    hideJoinFlow()
     if(operator === 1){
       setShowView({...showView, btn1:true, btn2:false})
     }else{
@@ -53,34 +54,54 @@ function App() {
 
   function joinSession(config_) {
     sessionContainer = document.getElementById("sessionContainer")
-    document.getElementById("join-flow").style.display = 'none'
+    const vKey = Math.floor(Math.random() * 10000)
     
     uitoolkit.joinSession(sessionContainer, config_)
+    document.getElementById("share-call-link").value = window.location.origin + "/join-call/"+config_.sessionName+"/0/"+config_.sessionPasscode+"/"+vKey
     uitoolkit.onSessionClosed(sessionClosed)
   }
   var sessionClosed = (() => {
     setShowView({...showView, btn1:true, btn2:true})
     console.log('session closed')
     uitoolkit.closeSession(sessionContainer)
-    document.getElementById("join-flow").style.display = 'block'
+    showJoinFlow()
   })
+  
+  const hideJoinFlow = () => {
+    var joinFlowElements = document.getElementsByClassName("join-flow");
+    for (var i = 0; i < joinFlowElements.length; i++) {
+        joinFlowElements[i].style.display = 'none';
+    }
+  }
+
+  const showJoinFlow = () => {
+    var joinFlowElements = document.getElementsByClassName("join-flow");
+    for (var i = 0; i < joinFlowElements.length; i++) {
+        joinFlowElements[i].style.display = 'block';
+    }
+  }
 
   return (
     <>
-      <h2 className="heading">We can start a single video session at a time</h2>
+      <h2 className="heading">Start a Call</h2>
+      <div className="share-video-link">
+        <input type="text" value="" placeholder="Share this video link to join session" id="share-call-link" readOnly/>
+      </div>
       <div className="App">
+      
       {
         showView.btn1
         ?
         <main>
-          <div id="join-flow">
-            <h3>Operator 1</h3>
-
+          
+          <h3>Operator 1</h3>
+          {/* <div id="share-link" className="share-link">
+            <input type="text" value="" id="share-video-link" />
+          </div> */}
+          <div id="join-flow" className="join-flow"> 
             <button onClick={()=>getVideoSDKJWT(1)}>Start Call</button>
           </div>
-          <div className='call-view'>
-            
-          </div>
+          
           <div id='sessionContainer'></div>
         </main>
         :
@@ -91,13 +112,10 @@ function App() {
         showView.btn2
         ?
         <main>
-          <div id="join-flow">
+          <div id="join-flow" className="join-flow">
             <h3>Operator 2</h3>
 
             <button onClick={()=>getVideoSDKJWT(2)}>Start Call</button>
-          </div>
-          <div className='call-view'>
-            
           </div>
           <div id='sessionContainer'></div>
         </main>

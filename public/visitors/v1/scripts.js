@@ -5,11 +5,14 @@ var authEndpoint = 'https://zoom-video-sdk-f4fj.vercel.app/'
 var config = {
     videoSDKJWT: '',
     sessionName: 'Room1',
-    userName: 'Visior 1',
+    userName: Math.floor(Math.random() * 10000),
     sessionPasscode: '123',
     features: ['video', 'audio', 'settings', 'users', 'chat', 'share']
 };
 var role = 0
+
+let visito_id = Math.floor(Math.random() * 10000)
+document.getElementById("v1-heading").innerText = "Visitor_" + visito_id
 
 window.getVideoSDKJWT = getVideoSDKJWT
 
@@ -17,7 +20,7 @@ function getVideoSDKJWT(operator) {
     var config = {
         videoSDKJWT: '',
         sessionName: operator == 1 ? "Room1" : "Room2",
-        userName: "Visitor 1",
+        userName: "Visitor_" + String(visito_id),
         sessionPasscode: '123',
         features: ['video', 'audio', 'settings', 'users', 'chat', 'share']
     };
@@ -54,7 +57,6 @@ function joinSession(config) {
     // console.log(config)
     // return;
     uitoolkit.joinSession(sessionContainer, config)
-
     uitoolkit.onSessionClosed(sessionClosed)
 }
 

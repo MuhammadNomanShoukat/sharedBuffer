@@ -36,3 +36,10 @@ main #join-flow button {
 main #join-flow button:hover {
     background-color: #2681F2;
 }
+
+.join-class-block{
+    max-width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    min-height: 300px;
+}

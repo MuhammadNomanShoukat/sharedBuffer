@@ -5,13 +5,19 @@ var authEndpoint = 'https://zoom-video-sdk-f4fj.vercel.app/'
 
 var role = 0
 
+let visito_id = Math.floor(Math.random() * 10000)
+document.getElementById("v2-heading").innerText = "Visitor_" + visito_id
+
 window.getVideoSDKJWT = getVideoSDKJWT
+
+// const v1Selector = document.getElementById("call-link-v2")
+// v1Selector.value = `${window.location.origin}/Room2/123/0`
 
 function getVideoSDKJWT(operator) {
     var config = {
         videoSDKJWT: '',
         sessionName: operator == 1 ? "Room1" : "Room2",
-        userName: "Visitor 2",
+        userName: visito_id,
         sessionPasscode: '123',
         features: ['video', 'audio', 'settings', 'users', 'chat', 'share']
     };

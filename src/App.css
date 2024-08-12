@@ -24,6 +24,20 @@ main #join-flow button:hover {
     background-color: #2681F2;
 }
 
+/* .share-link{
+    display: none;
+} */
+
+.share-video-link{
+    text-align: center;
+}
+
+#share-call-link{
+    padding: 5px;
+    width: 600px;
+    margin-top:20px
+}
+
 .App{
     display: flex;
     align-items: center;

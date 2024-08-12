@@ -29,6 +29,13 @@
     background-color: #0fa216;
     color: #fff;
   }
+
+  .join-class-block{
+    max-width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    min-height: 300px;
+}
   
   .call-box .heading .call-btns .decline{
     background-color: red;

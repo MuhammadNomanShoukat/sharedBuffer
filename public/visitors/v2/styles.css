@@ -11,11 +11,18 @@ html, body {
     min-width: 0 !important;
 }
 
+#call-link-v2{
+    padding: 5px;
+    width: 250px;
+}
+
 main {
     width: 100%;
     margin: auto;
     text-align: center;
 }
+
+
 
 main #join-flow button {
     margin-top: 20px;

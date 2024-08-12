@@ -24,3 +24,10 @@ html, body {
 .call-view #sessionContainer2{
     border: 1px solid #ddd;
 }
+
+.join-class-block{
+    max-width: 50%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    min-height: 300px;
+}
